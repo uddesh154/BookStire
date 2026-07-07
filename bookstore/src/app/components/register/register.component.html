@@ -1,0 +1,81 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <i class="fas fa-book-open"></i>
+      <span>BookStore</span>
+    </div>
+    <h1>Create an account</h1>
+    <p class="subtitle">Join thousands of book lovers today.</p>
+
+    <div class="error-banner" *ngIf="errorMessage">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" formControlName="firstName" placeholder="John" />
+          </div>
+          <span class="error" *ngIf="hasError('firstName', 'required')">First name is required</span>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input type="text" formControlName="lastName" placeholder="Doe" />
+          </div>
+          <span class="error" *ngIf="hasError('lastName', 'required')">Last name is required</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" formControlName="email" placeholder="you@example.com" />
+        </div>
+        <span class="error" *ngIf="hasError('email', 'required')">Email is required</span>
+        <span class="error" *ngIf="hasError('email', 'email')">Enter a valid email address</span>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Min. 6 characters" />
+          <button type="button" class="eye-btn" (click)="showPassword = !showPassword">
+            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </button>
+        </div>
+        <span class="error" *ngIf="hasError('password', 'required')">Password is required</span>
+        <span class="error" *ngIf="hasError('password', 'minlength')">Password must be at least 6 characters</span>
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Repeat password" />
+        </div>
+        <span class="error" *ngIf="hasError('confirmPassword', 'required')">Please confirm your password</span>
+        <span class="error" *ngIf="hasError('confirmPassword', 'mismatch')">Passwords do not match</span>
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loading">
+        <ng-container *ngIf="!loading">
+          <i class="fas fa-user-plus"></i> Create Account
+        </ng-container>
+        <ng-container *ngIf="loading">
+          <i class="fas fa-spinner fa-spin"></i> Creating...
+        </ng-container>
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Already have an account? <a routerLink="/login">Sign in here</a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="cart-page">
+  <div class="container">
+    <h1 class="page-title">
+      <i class="fas fa-shopping-cart"></i> Shopping Cart
+      <span class="item-count" *ngIf="cart?.totalItems">{{ cart.totalItems }} item{{ cart.totalItems !== 1 ? 's' : '' }}</span>
+    </h1>
+
+    <div class="cart-layout" *ngIf="cart?.items?.length > 0; else emptyCart">
+      <!-- Items -->
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of cart.items">
+          <img [src]="item.book.coverImage" [alt]="item.book.title" (click)="navigate('/books/' + item.book.id)" />
+          <div class="item-details">
+            <h3 (click)="navigate('/books/' + item.book.id)">{{ item.book.title }}</h3>
+            <p class="author">by {{ item.book.author }}</p>
+            <p class="genre">{{ item.book.genre }}</p>
+          </div>
+          <div class="item-price">\${{ item.book.price.toFixed(2) }}</div>
+          <div class="qty-control">
+            <button (click)="updateQuantity(item.book.id, item.quantity - 1)">
+              <i class="fas fa-minus"></i>
+            </button>
+            <span>{{ item.quantity }}</span>
+            <button (click)="updateQuantity(item.book.id, item.quantity + 1)">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="item-total">\${{ (item.book.price * item.quantity).toFixed(2) }}</div>
+          <button class="remove-btn" (click)="removeItem(item.book.id)" title="Remove">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+
+        <div class="cart-actions">
+          <a routerLink="/books" class="continue-btn">
+            <i class="fas fa-arrow-left"></i> Continue Shopping
+          </a>
+          <button class="clear-btn" (click)="clearCart()">
+            <i class="fas fa-trash"></i> Clear Cart
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>\${{ cart.subtotal.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row savings" *ngIf="cart.discount > 0">
+          <span>You save</span>
+          <span>-\${{ cart.discount.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span class="free" *ngIf="cart.subtotal >= 35; else shippingFee">FREE</span>
+          <ng-template #shippingFee><span>\$4.99</span></ng-template>
+        </div>
+        <div class="summary-row">
+          <span>Tax (8%)</span>
+          <span>\${{ cart.tax.toFixed(2) }}</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row total-row">
+          <span>Total</span>
+          <span>\${{ cart.total.toFixed(2) }}</span>
+        </div>
+        <div class="free-shipping-notice" *ngIf="cart.subtotal < 35">
+          <i class="fas fa-shipping-fast"></i>
+          Add \${{ (35 - cart.subtotal).toFixed(2) }} more for FREE shipping!
+        </div>
+        <button class="checkout-btn" (click)="checkout()">
+          <i class="fas fa-lock"></i> Proceed to Checkout
+        </button>
+        <div class="secure-badges">
+          <i class="fas fa-shield-alt"></i> Secure & Encrypted Checkout
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <h2>Your cart is empty</h2>
+        <p>Looks like you haven't added any books yet.</p>
+        <a routerLink="/books" class="shop-btn">Browse Books</a>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a routerLink="/" class="brand">
+          <i class="fas fa-book-open"></i>
+          <span>BookStore</span>
+        </a>
+        <p>Your favourite online bookstore. Discover thousands of titles from world-class authors.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>Shop</h4>
+        <a routerLink="/books">All Books</a>
+        <a routerLink="/books" [queryParams]="{genre: 'Fiction'}">Fiction</a>
+        <a routerLink="/books" [queryParams]="{genre: 'Non-Fiction'}">Non-Fiction</a>
+        <a routerLink="/books" [queryParams]="{genre: 'Fantasy'}">Fantasy</a>
+        <a routerLink="/books" [queryParams]="{genre: 'Self-Help'}">Self-Help</a>
+      </div>
+
+      <div class="footer-links">
+        <h4>Account</h4>
+        <a routerLink="/login">Login</a>
+        <a routerLink="/register">Register</a>
+        <a routerLink="/cart">My Cart</a>
+        <a routerLink="/checkout">Orders</a>
+      </div>
+
+      <div class="footer-newsletter">
+        <h4>Newsletter</h4>
+        <p>Get the latest book recommendations straight to your inbox.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Enter your email" />
+          <button>Subscribe</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ currentYear }} BookStore. All rights reserved.</p>
+      <div class="payment-badges">
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-paypal"></i>
+        <i class="fab fa-cc-stripe"></i>
+      </div>
+    </div>
+  </div>
+</footer>

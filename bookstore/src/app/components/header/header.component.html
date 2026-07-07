@@ -1,0 +1,80 @@
+<nav class="navbar">
+  <div class="container">
+    <a class="brand" routerLink="/">
+      <i class="fas fa-book-open"></i>
+      <span>BookStore</span>
+    </a>
+
+    <div class="search-bar">
+      <form (ngSubmit)="onSearch()">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          name="search"
+          placeholder="Search books, authors, genres..."
+        />
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+
+    <div class="nav-actions">
+      <a routerLink="/books" routerLinkActive="active" class="nav-link">
+        <i class="fas fa-th-large"></i> Catalog
+      </a>
+      <a routerLink="/cart" class="nav-link cart-link">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+      </a>
+
+      <ng-container *ngIf="isLoggedIn; else guestLinks">
+        <div class="user-menu">
+          <button class="user-btn">
+            <i class="fas fa-user-circle"></i>
+            <span>{{ currentUser?.firstName }}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="dropdown">
+            <a routerLink="/checkout" class="dropdown-item">
+              <i class="fas fa-box"></i> My Orders
+            </a>
+            <button class="dropdown-item logout-btn" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #guestLinks>
+        <a routerLink="/login" class="btn btn-outline">Login</a>
+        <a routerLink="/register" class="btn btn-primary">Sign Up</a>
+      </ng-template>
+
+      <button class="hamburger" (click)="toggleMenu()">
+        <i [class]="isMenuOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="isMenuOpen">
+    <form (ngSubmit)="onSearch()" class="mobile-search">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        name="mobileSearch"
+        placeholder="Search books..."
+      />
+      <button type="submit"><i class="fas fa-search"></i></button>
+    </form>
+    <a routerLink="/" class="mobile-link">Home</a>
+    <a routerLink="/books" class="mobile-link">Catalog</a>
+    <a routerLink="/cart" class="mobile-link">Cart ({{ cartItemCount }})</a>
+    <ng-container *ngIf="isLoggedIn; else mobileGuest">
+      <a routerLink="/checkout" class="mobile-link">My Orders</a>
+      <button class="mobile-link" (click)="logout()">Logout</button>
+    </ng-container>
+    <ng-template #mobileGuest>
+      <a routerLink="/login" class="mobile-link">Login</a>
+      <a routerLink="/register" class="mobile-link">Sign Up</a>
+    </ng-template>
+  </div>
+</nav>

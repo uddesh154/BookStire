@@ -1,0 +1,372 @@
+.detail-page {
+  background: #f7f8fa;
+  min-height: 100vh;
+  padding: 32px 0 60px;
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #57606a;
+    margin-bottom: 28px;
+
+    a { color: #3b82d4; text-decoration: none; &:hover { text-decoration: underline; } }
+    i { font-size: 0.7rem; }
+    span { color: #1f2328; font-weight: 500; }
+  }
+
+  .product-main {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 48px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 40px;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+
+    .product-image {
+      position: relative;
+      align-self: start;
+
+      img {
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        display: block;
+      }
+
+      .badges {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .badge {
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+
+          &.featured { background: #3b82d4; color: #fff; }
+          &.bestseller { background: #f59e0b; color: #fff; }
+          &.discount { background: #10b981; color: #fff; }
+        }
+      }
+    }
+
+    .product-info {
+      .genre-tag {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #3b82d4;
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+      }
+
+      .title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #1f2328;
+        margin-bottom: 8px;
+        line-height: 1.2;
+      }
+
+      .author { font-size: 1rem; color: #57606a; margin-bottom: 16px; }
+
+      .rating-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+
+        .stars i { color: #f59e0b; font-size: 0.9rem; }
+        .rating-val { font-weight: 700; }
+        .review-count { color: #57606a; font-size: 0.875rem; }
+      }
+
+      .pricing {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+
+        .current-price { font-size: 2rem; font-weight: 800; color: #1f2328; }
+        .original-price { font-size: 1.1rem; color: #9ca3af; text-decoration: line-through; }
+        .savings {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: #10b981;
+          background: #d1fae5;
+          padding: 3px 8px;
+          border-radius: 4px;
+        }
+      }
+
+      .stock-status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #10b981;
+        margin-bottom: 20px;
+
+        &.out { color: #ef4444; }
+      }
+
+      .quantity-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+
+        label { font-weight: 600; font-size: 0.9rem; }
+
+        .qty-control {
+          display: flex;
+          align-items: center;
+          gap: 0;
+          border: 2px solid #e5e7eb;
+          border-radius: 8px;
+          overflow: hidden;
+
+          button {
+            background: #f7f8fa;
+            border: none;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: background 0.2s;
+
+            &:hover { background: #e5e7eb; }
+          }
+
+          span { padding: 8px 16px; font-weight: 700; min-width: 40px; text-align: center; }
+        }
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+
+        .btn-cart, .btn-buy {
+          flex: 1;
+          min-width: 160px;
+          padding: 13px 20px;
+          border-radius: 10px;
+          font-size: 0.95rem;
+          font-weight: 700;
+          cursor: pointer;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          transition: all 0.2s;
+        }
+
+        .btn-cart {
+          background: #3b82d4;
+          color: #fff;
+          &:hover { background: #2563b8; }
+          &.added { background: #10b981; }
+        }
+
+        .btn-buy {
+          background: #f59e0b;
+          color: #fff;
+          &:hover { background: #d97706; }
+        }
+      }
+
+      .meta-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+
+        .meta-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.85rem;
+          color: #57606a;
+
+          i { color: #3b82d4; width: 16px; }
+        }
+      }
+
+      .delivery-info {
+        background: #f0fdf4;
+        border: 1px solid #d1fae5;
+        border-radius: 8px;
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .d-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.85rem;
+          color: #10b981;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  // Tabs
+  .tabs-section {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+
+    .tab-headers {
+      display: flex;
+      border-bottom: 1px solid #e5e7eb;
+
+      button {
+        padding: 16px 24px;
+        background: none;
+        border: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #57606a;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+
+        &:hover { color: #3b82d4; }
+        &.active { color: #3b82d4; border-bottom-color: #3b82d4; }
+      }
+    }
+
+    .tab-body {
+      padding: 32px;
+
+      .description {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: #374151;
+        margin-bottom: 20px;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .tag {
+          background: #eff6ff;
+          color: #3b82d4;
+          padding: 4px 12px;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+      }
+
+      .details-table {
+        .detail-row {
+          display: flex;
+          padding: 12px 0;
+          border-bottom: 1px solid #f3f4f6;
+
+          span:first-child {
+            width: 160px;
+            font-weight: 600;
+            color: #374151;
+            flex-shrink: 0;
+          }
+          span:last-child { color: #57606a; }
+        }
+      }
+
+      .reviews-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .review-card {
+          padding: 20px;
+          background: #f7f8fa;
+          border-radius: 10px;
+
+          .review-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+
+            .avatar {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              background: #3b82d4;
+              color: #fff;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: 700;
+              font-size: 1rem;
+            }
+
+            strong { font-size: 0.9rem; color: #1f2328; }
+
+            .review-stars i { color: #f59e0b; font-size: 0.75rem; }
+
+            .review-date { margin-left: auto; font-size: 0.8rem; color: #9ca3af; }
+          }
+
+          p { font-size: 0.9rem; color: #374151; line-height: 1.6; }
+        }
+      }
+
+      .no-reviews { color: #57606a; font-size: 0.9rem; }
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 16px;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #3b82d4;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  p { color: #57606a; }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

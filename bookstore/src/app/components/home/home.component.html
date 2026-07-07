@@ -1,0 +1,164 @@
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">📚 Welcome to BookStore</div>
+    <h1>Discover Your Next<br /><span>Favourite Book</span></h1>
+    <p>
+      Explore thousands of titles across every genre. From timeless classics to modern bestsellers — find your next great read today.
+    </p>
+    <div class="hero-actions">
+      <a routerLink="/books" class="btn btn-primary">
+        <i class="fas fa-search"></i> Browse Catalog
+      </a>
+      <a routerLink="/books" [queryParams]="{genre: 'Fantasy'}" class="btn btn-outline">
+        <i class="fas fa-dragon"></i> Explore Fantasy
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>12,000+</strong><span>Books</span></div>
+      <div class="divider"></div>
+      <div class="stat"><strong>500+</strong><span>Authors</span></div>
+      <div class="divider"></div>
+      <div class="stat"><strong>50K+</strong><span>Customers</span></div>
+    </div>
+  </div>
+  <div class="hero-image">
+    <div class="book-stack">
+      <div class="book-card-hero" *ngFor="let book of featuredBooks.slice(0, 3); let i = index"
+        [style.transform]="'rotate(' + (i * 5 - 5) + 'deg) translateY(' + (i * -10) + 'px)'">
+        <img [src]="book.coverImage" [alt]="book.title" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Genre Categories -->
+<section class="genres">
+  <div class="container">
+    <div class="section-header">
+      <h2>Browse by Genre</h2>
+      <a routerLink="/books" class="see-all">See All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="genres-grid">
+      <button
+        class="genre-card"
+        *ngFor="let genre of genres"
+        (click)="browseGenre(genre.name)"
+        [style.--accent]="genre.color"
+      >
+        <div class="genre-icon"><i [class]="genre.icon"></i></div>
+        <span>{{ genre.name }}</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Books -->
+<section class="books-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Featured Books</h2>
+      <a routerLink="/books" class="see-all">See All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="books-grid">
+      <div
+        class="book-card"
+        *ngFor="let book of featuredBooks"
+        (click)="viewBook(book.id)"
+      >
+        <div class="book-cover">
+          <img [src]="book.coverImage" [alt]="book.title" />
+          <div class="book-badges">
+            <span class="badge badge-featured" *ngIf="book.isFeatured">Featured</span>
+            <span class="badge badge-bestseller" *ngIf="book.isBestseller">Bestseller</span>
+          </div>
+          <div class="book-overlay">
+            <button class="overlay-btn" (click)="viewBook(book.id)">
+              <i class="fas fa-eye"></i> Quick View
+            </button>
+          </div>
+        </div>
+        <div class="book-info">
+          <div class="book-genre">{{ book.genre }}</div>
+          <h3 class="book-title">{{ book.title }}</h3>
+          <p class="book-author">by {{ book.author }}</p>
+          <div class="book-rating">
+            <div class="stars">
+              <i *ngFor="let star of [1,2,3,4,5]"
+                [class]="star <= book.rating ? 'fas fa-star' : (star - 0.5 <= book.rating ? 'fas fa-star-half-alt' : 'far fa-star')"></i>
+            </div>
+            <span>({{ book.reviewCount }})</span>
+          </div>
+          <div class="book-price">
+            <span class="current-price">\${{ book.price.toFixed(2) }}</span>
+            <span class="original-price" *ngIf="book.originalPrice">\${{ book.originalPrice.toFixed(2) }}</span>
+          </div>
+          <button
+            class="add-cart-btn"
+            [class.added]="addedToCartId === book.id"
+            (click)="addToCart(book, $event)"
+          >
+            <i [class]="addedToCartId === book.id ? 'fas fa-check' : 'fas fa-cart-plus'"></i>
+            {{ addedToCartId === book.id ? 'Added!' : 'Add to Cart' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bestsellers -->
+<section class="books-section bestsellers-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Bestsellers</h2>
+      <a routerLink="/books" class="see-all">See All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="bestsellers-list">
+      <div
+        class="bestseller-item"
+        *ngFor="let book of bestsellerBooks; let i = index"
+        (click)="viewBook(book.id)"
+      >
+        <div class="rank">{{ i + 1 }}</div>
+        <img [src]="book.coverImage" [alt]="book.title" />
+        <div class="info">
+          <h4>{{ book.title }}</h4>
+          <p>{{ book.author }}</p>
+          <div class="price">\${{ book.price.toFixed(2) }}</div>
+        </div>
+        <button class="buy-btn" (click)="addToCart(book, $event)">
+          <i class="fas fa-cart-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Value Propositions -->
+<section class="value-props">
+  <div class="container">
+    <div class="props-grid">
+      <div class="prop-item">
+        <i class="fas fa-shipping-fast"></i>
+        <h4>Free Shipping</h4>
+        <p>Free delivery on orders over $35</p>
+      </div>
+      <div class="prop-item">
+        <i class="fas fa-undo-alt"></i>
+        <h4>Easy Returns</h4>
+        <p>30-day hassle-free returns</p>
+      </div>
+      <div class="prop-item">
+        <i class="fas fa-lock"></i>
+        <h4>Secure Payment</h4>
+        <p>100% secure checkout</p>
+      </div>
+      <div class="prop-item">
+        <i class="fas fa-headset"></i>
+        <h4>24/7 Support</h4>
+        <p>Dedicated customer service</p>
+      </div>
+    </div>
+  </div>
+</section>

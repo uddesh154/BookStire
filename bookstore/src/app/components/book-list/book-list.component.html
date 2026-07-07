@@ -1,0 +1,100 @@
+<div class="book-list-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <h1>
+        <span *ngIf="!searchQuery && activeGenre === 'All'">All Books</span>
+        <span *ngIf="searchQuery">Search: "{{ searchQuery }}"</span>
+        <span *ngIf="!searchQuery && activeGenre !== 'All'">{{ activeGenre }}</span>
+      </h1>
+      <p class="result-count">{{ filteredBooks.length }} book{{ filteredBooks.length !== 1 ? 's' : '' }} found</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <!-- Genre Filters -->
+      <div class="genre-filters">
+        <button
+          *ngFor="let genre of genres"
+          class="genre-btn"
+          [class.active]="activeGenre === genre"
+          (click)="filterByGenre(genre)"
+        >
+          {{ genre }}
+        </button>
+      </div>
+      <!-- Sort -->
+      <div class="sort-controls">
+        <label>Sort by</label>
+        <select [(ngModel)]="sortBy" (change)="applyFilters()">
+          <option value="default">Default</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Highest Rated</option>
+          <option value="title">Title A-Z</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div class="books-grid" *ngIf="filteredBooks.length > 0; else noResults">
+      <div
+        class="book-card"
+        *ngFor="let book of filteredBooks"
+        (click)="viewBook(book.id)"
+      >
+        <div class="book-cover">
+          <img [src]="book.coverImage" [alt]="book.title" loading="lazy" />
+          <div class="book-badges">
+            <span class="badge badge-featured" *ngIf="book.isFeatured">Featured</span>
+            <span class="badge badge-bestseller" *ngIf="book.isBestseller">Bestseller</span>
+            <span class="badge badge-out" *ngIf="!book.inStock">Out of Stock</span>
+          </div>
+          <div class="book-overlay">
+            <button class="overlay-btn" (click)="viewBook(book.id); $event.stopPropagation()">
+              <i class="fas fa-eye"></i> Quick View
+            </button>
+          </div>
+        </div>
+        <div class="book-info">
+          <div class="book-genre">{{ book.genre }}</div>
+          <h3 class="book-title">{{ book.title }}</h3>
+          <p class="book-author">by {{ book.author }}</p>
+          <div class="book-rating">
+            <i *ngFor="let s of [1,2,3,4,5]"
+              [class]="s <= book.rating ? 'fas fa-star' : (s - 0.5 <= book.rating ? 'fas fa-star-half-alt' : 'far fa-star')">
+            </i>
+            <span>{{ book.rating }} ({{ book.reviewCount }})</span>
+          </div>
+          <div class="book-price">
+            <span class="current">\${{ book.price.toFixed(2) }}</span>
+            <span class="original" *ngIf="book.originalPrice">\${{ book.originalPrice.toFixed(2) }}</span>
+            <span class="discount" *ngIf="book.originalPrice">
+              -{{ getDiscountPercent(book) }}%
+            </span>
+          </div>
+          <button
+            class="add-cart-btn"
+            [disabled]="!book.inStock"
+            [class.added]="addedToCartMap[book.id]"
+            (click)="addToCart(book, $event)"
+          >
+            <i [class]="addedToCartMap[book.id] ? 'fas fa-check' : 'fas fa-cart-plus'"></i>
+            {{ !book.inStock ? 'Out of Stock' : addedToCartMap[book.id] ? 'Added!' : 'Add to Cart' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noResults>
+      <div class="no-results">
+        <i class="fas fa-search"></i>
+        <h3>No books found</h3>
+        <p>Try a different search term or genre.</p>
+        <button (click)="clearFilters()">Clear Filters</button>
+      </div>
+    </ng-template>
+  </div>
+</div>

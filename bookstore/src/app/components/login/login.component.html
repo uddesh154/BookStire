@@ -1,0 +1,52 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <i class="fas fa-book-open"></i>
+      <span>BookStore</span>
+    </div>
+    <h1>Welcome back</h1>
+    <p class="subtitle">Sign in to your account to continue shopping.</p>
+
+    <div class="error-banner" *ngIf="errorMessage">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope"></i>
+          <input type="email" formControlName="email" placeholder="you@example.com" />
+        </div>
+        <span class="error" *ngIf="hasError('email', 'required')">Email is required</span>
+        <span class="error" *ngIf="hasError('email', 'email')">Enter a valid email address</span>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••" />
+          <button type="button" class="eye-btn" (click)="showPassword = !showPassword">
+            <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </button>
+        </div>
+        <span class="error" *ngIf="hasError('password', 'required')">Password is required</span>
+        <span class="error" *ngIf="hasError('password', 'minlength')">Password must be at least 6 characters</span>
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="loading">
+        <ng-container *ngIf="!loading">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </ng-container>
+        <ng-container *ngIf="loading">
+          <i class="fas fa-spinner fa-spin"></i> Signing In...
+        </ng-container>
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Don't have an account? <a routerLink="/register">Create one here</a>
+    </p>
+  </div>
+</div>

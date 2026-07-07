@@ -1,0 +1,139 @@
+<div class="checkout-page">
+  <div class="container">
+    <!-- Page Header -->
+    <div class="checkout-header">
+      <h1><i class="fas fa-lock"></i> Checkout</h1>
+      <div class="steps">
+        <div class="step active"><span>1</span> Shipping</div>
+        <div class="step-divider"></div>
+        <div class="step" [class.active]="orderPlaced"><span>2</span> Payment</div>
+        <div class="step-divider"></div>
+        <div class="step" [class.active]="orderPlaced"><span>3</span> Confirm</div>
+      </div>
+    </div>
+
+    <!-- Order Success -->
+    <div class="order-success" *ngIf="orderPlaced">
+      <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+      <h2>Order Placed Successfully!</h2>
+      <p>Thank you, <strong>{{ orderSummary?.shippingAddress?.fullName }}</strong>! Your order <strong>#{{ orderSummary?.id }}</strong> has been received.</p>
+      <p>A confirmation will be sent to <strong>{{ orderSummary?.shippingAddress?.email }}</strong></p>
+      <a routerLink="/books" class="continue-btn">
+        <i class="fas fa-shopping-bag"></i> Continue Shopping
+      </a>
+    </div>
+
+    <!-- Checkout Form -->
+    <div class="checkout-layout" *ngIf="!orderPlaced">
+      <!-- Shipping Form -->
+      <form class="shipping-form" [formGroup]="shippingForm" (ngSubmit)="placeOrder()">
+        <h2><i class="fas fa-truck"></i> Shipping Address</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" formControlName="fullName" placeholder="John Doe" />
+            <span class="error" *ngIf="hasError('fullName', 'required')">Full name is required</span>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" formControlName="email" placeholder="you@example.com" />
+            <span class="error" *ngIf="hasError('email', 'required')">Email is required</span>
+            <span class="error" *ngIf="hasError('email', 'email')">Enter a valid email</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone *</label>
+            <input type="tel" formControlName="phone" placeholder="+1 (555) 000-0000" />
+            <span class="error" *ngIf="hasError('phone', 'required')">Phone is required</span>
+          </div>
+          <div class="form-group">
+            <label>Country *</label>
+            <select formControlName="country">
+              <option value="">Select country</option>
+              <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
+            </select>
+            <span class="error" *ngIf="hasError('country', 'required')">Country is required</span>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label>Address Line 1 *</label>
+          <input type="text" formControlName="addressLine1" placeholder="123 Main Street" />
+          <span class="error" *ngIf="hasError('addressLine1', 'required')">Address is required</span>
+        </div>
+
+        <div class="form-group full">
+          <label>Address Line 2 (optional)</label>
+          <input type="text" formControlName="addressLine2" placeholder="Apt, Suite, Floor..." />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>City *</label>
+            <input type="text" formControlName="city" placeholder="New York" />
+            <span class="error" *ngIf="hasError('city', 'required')">City is required</span>
+          </div>
+          <div class="form-group">
+            <label>State *</label>
+            <input type="text" formControlName="state" placeholder="NY" />
+            <span class="error" *ngIf="hasError('state', 'required')">State is required</span>
+          </div>
+          <div class="form-group">
+            <label>ZIP Code *</label>
+            <input type="text" formControlName="zipCode" placeholder="10001" />
+            <span class="error" *ngIf="hasError('zipCode', 'required')">ZIP code is required</span>
+          </div>
+        </div>
+
+        <h2 class="mt-section"><i class="fas fa-credit-card"></i> Payment Method</h2>
+        <div class="payment-options">
+          <label class="payment-option" *ngFor="let method of paymentMethods">
+            <input type="radio" name="payment" [value]="method.value" [(ngModel)]="selectedPayment"
+              [ngModelOptions]="{standalone: true}" />
+            <div class="option-content">
+              <i [class]="method.icon"></i>
+              <span>{{ method.label }}</span>
+            </div>
+          </label>
+        </div>
+
+        <button type="submit" class="place-order-btn" [disabled]="submitting">
+          <ng-container *ngIf="!submitting">
+            <i class="fas fa-lock"></i> Place Order — \${{ cart?.total?.toFixed(2) }}
+          </ng-container>
+          <ng-container *ngIf="submitting">
+            <i class="fas fa-spinner fa-spin"></i> Processing...
+          </ng-container>
+        </button>
+      </form>
+
+      <!-- Order Summary -->
+      <div class="summary-panel">
+        <h2>Order Summary</h2>
+        <div class="order-items">
+          <div class="o-item" *ngFor="let item of cart?.items">
+            <img [src]="item.book.coverImage" [alt]="item.book.title" />
+            <div class="o-info">
+              <h4>{{ item.book.title }}</h4>
+              <p>{{ item.book.author }}</p>
+            </div>
+            <div class="o-qty">x{{ item.quantity }}</div>
+            <div class="o-price">\${{ (item.book.price * item.quantity).toFixed(2) }}</div>
+          </div>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="s-row"><span>Subtotal</span><span>\${{ cart?.subtotal?.toFixed(2) }}</span></div>
+        <div class="s-row savings" *ngIf="cart?.discount > 0">
+          <span>Savings</span><span>-\${{ cart?.discount?.toFixed(2) }}</span>
+        </div>
+        <div class="s-row"><span>Shipping</span><span>{{ cart?.subtotal >= 35 ? 'FREE' : '$4.99' }}</span></div>
+        <div class="s-row"><span>Tax</span><span>\${{ cart?.tax?.toFixed(2) }}</span></div>
+        <div class="summary-divider"></div>
+        <div class="s-row total"><span>Total</span><span>\${{ cart?.total?.toFixed(2) }}</span></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,164 @@
+<div class="detail-page" *ngIf="book; else loading">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a routerLink="/">Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <a routerLink="/books">Books</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>{{ book.title }}</span>
+    </div>
+
+    <!-- Main Product Section -->
+    <div class="product-main">
+      <div class="product-image">
+        <img [src]="book.coverImage" [alt]="book.title" />
+        <div class="badges">
+          <span class="badge featured" *ngIf="book.isFeatured">Featured</span>
+          <span class="badge bestseller" *ngIf="book.isBestseller">Bestseller</span>
+          <span class="badge discount" *ngIf="book.originalPrice">
+            -{{ getDiscountPercent() }}% OFF
+          </span>
+        </div>
+      </div>
+
+      <div class="product-info">
+        <div class="genre-tag">{{ book.genre }}</div>
+        <h1 class="title">{{ book.title }}</h1>
+        <p class="author">by <strong>{{ book.author }}</strong></p>
+
+        <div class="rating-row">
+          <div class="stars">
+            <i *ngFor="let s of [1,2,3,4,5]"
+              [class]="s <= book.rating ? 'fas fa-star' : (s - 0.5 <= book.rating ? 'fas fa-star-half-alt' : 'far fa-star')">
+            </i>
+          </div>
+          <span class="rating-val">{{ book.rating }}</span>
+          <span class="review-count">({{ book.reviewCount }} reviews)</span>
+        </div>
+
+        <div class="pricing">
+          <span class="current-price">\${{ book.price.toFixed(2) }}</span>
+          <span class="original-price" *ngIf="book.originalPrice">\${{ book.originalPrice.toFixed(2) }}</span>
+          <span class="savings" *ngIf="book.originalPrice">
+            You save \${{ (book.originalPrice - book.price).toFixed(2) }}
+          </span>
+        </div>
+
+        <div class="stock-status" [class.out]="!book.inStock">
+          <i [class]="book.inStock ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+          {{ book.inStock ? 'In Stock (' + book.stockCount + ' available)' : 'Out of Stock' }}
+        </div>
+
+        <div class="quantity-row" *ngIf="book.inStock">
+          <label>Quantity</label>
+          <div class="qty-control">
+            <button (click)="setQuantity(quantity - 1)"><i class="fas fa-minus"></i></button>
+            <span>{{ quantity }}</span>
+            <button (click)="setQuantity(quantity + 1)"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+
+        <div class="actions" *ngIf="book.inStock">
+          <button
+            class="btn-cart"
+            [class.added]="addedToCart"
+            (click)="addToCart()"
+          >
+            <i [class]="addedToCart ? 'fas fa-check' : 'fas fa-cart-plus'"></i>
+            {{ addedToCart ? 'Added to Cart!' : 'Add to Cart' }}
+          </button>
+          <button class="btn-buy" (click)="buyNow()">
+            <i class="fas fa-bolt"></i> Buy Now
+          </button>
+        </div>
+
+        <div class="meta-info">
+          <div class="meta-item">
+            <i class="fas fa-book"></i>
+            <span>{{ book.pages }} pages</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-language"></i>
+            <span>{{ book.language }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-calendar"></i>
+            <span>{{ book.publishedDate | date:'mediumDate' }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-barcode"></i>
+            <span>{{ book.isbn }}</span>
+          </div>
+        </div>
+
+        <div class="delivery-info">
+          <div class="d-item"><i class="fas fa-shipping-fast"></i> Free delivery on orders over $35</div>
+          <div class="d-item"><i class="fas fa-undo"></i> 30-day easy returns</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-section">
+      <div class="tab-headers">
+        <button [class.active]="activeTab === 'description'" (click)="setTab('description')">Description</button>
+        <button [class.active]="activeTab === 'details'" (click)="setTab('details')">Book Details</button>
+        <button [class.active]="activeTab === 'reviews'" (click)="setTab('reviews')">
+          Reviews ({{ reviews.length }})
+        </button>
+      </div>
+
+      <div class="tab-body">
+        <!-- Description -->
+        <div *ngIf="activeTab === 'description'">
+          <p class="description">{{ book.description }}</p>
+          <div class="tags" *ngIf="book.tags?.length">
+            <span *ngFor="let tag of book.tags" class="tag">{{ tag }}</span>
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div *ngIf="activeTab === 'details'" class="details-table">
+          <div class="detail-row"><span>Author</span><span>{{ book.author }}</span></div>
+          <div class="detail-row"><span>Publisher</span><span>{{ book.publisher }}</span></div>
+          <div class="detail-row"><span>Published</span><span>{{ book.publishedDate | date:'longDate' }}</span></div>
+          <div class="detail-row"><span>Pages</span><span>{{ book.pages }}</span></div>
+          <div class="detail-row"><span>Language</span><span>{{ book.language }}</span></div>
+          <div class="detail-row"><span>ISBN</span><span>{{ book.isbn }}</span></div>
+          <div class="detail-row"><span>Genre</span><span>{{ book.genre }}</span></div>
+        </div>
+
+        <!-- Reviews -->
+        <div *ngIf="activeTab === 'reviews'">
+          <div *ngIf="reviews.length > 0; else noReviews" class="reviews-list">
+            <div class="review-card" *ngFor="let review of reviews">
+              <div class="review-header">
+                <div class="avatar">{{ review.userName.charAt(0) }}</div>
+                <div>
+                  <strong>{{ review.userName }}</strong>
+                  <div class="review-stars">
+                    <i *ngFor="let s of [1,2,3,4,5]"
+                      [class]="s <= review.rating ? 'fas fa-star' : 'far fa-star'"></i>
+                  </div>
+                </div>
+                <span class="review-date">{{ review.date | date:'mediumDate' }}</span>
+              </div>
+              <p>{{ review.comment }}</p>
+            </div>
+          </div>
+          <ng-template #noReviews>
+            <p class="no-reviews">No reviews yet. Be the first to review this book!</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>Loading book details...</p>
+  </div>
+</ng-template>
